@@ -44,37 +44,64 @@ void testSqlTableModel()
     cout << "1-change"<< endl << "2-new" << endl;
     int what_to_do;
     cin >> what_to_do;
-    if(what_to_do == 1)
-    {
 
+    if(what_to_do == 1) // Редактирование записи
+    {
+        cout << "input id"<< endl;
+        int id;
+        cin >> id;
+
+        QSqlRecord update_record;
+        int record_index = -1;
+        for(int i = 0; i < model.rowCount(); ++i)
+        {
+            if(model.record(i).value("id").toInt() == id)
+            {
+                update_record = model.record(i);
+                record_index = i;
+                break;
+            }
+        }
+        if(record_index == -1)
+        {
+            cout << "Student was not found!" << endl;
+            return;
+        }
+
+        cout << "input new GPA:";
+        float new_gpa;
+        cin >> new_gpa;
+
+        update_record.setValue("gpa", new_gpa);
+        model.setRecord(record_index, update_record);
     }
     else  // Вставка новой записи
     {
-        int new_raw_index = model.rowCount();
-        model.insertRows(new_raw_index,1);
-        model.setData(model.index(new_raw_index,0),new_raw_index+1);
+        int new_row_index = model.rowCount();
+        model.insertRows(new_row_index, 1);
+        model.setData(model.index(new_row_index,0),new_row_index + 1);
 
         cout << "firstname:";
         string firstname;
         cin >> firstname;
         QString qfirstname(firstname.c_str());
-        model.setData(model.index(new_raw_index,1),qfirstname);
+        model.setData(model.index(new_row_index,1),qfirstname);
 
         cout << "lastname:";
         string lastname;
         cin >> lastname;
         QString qlastname(lastname.c_str());
-        model.setData(model.index(new_raw_index,2),qlastname);
+        model.setData(model.index(new_row_index,2),qlastname);
 
         cout << "gpa:";
         float gpa;
         cin >> gpa;
-        model.setData(model.index(new_raw_index,3),gpa);
+        model.setData(model.index(new_row_index,3),gpa);
 
         cout << "group_id:";
         float group_id;
         cin >> group_id;
-        model.setData(model.index(new_raw_index,4),group_id);
+        model.setData(model.index(new_row_index,4),group_id);
 
         if(model.submitAll())
             cout << "New row was added!" << endl;
@@ -97,32 +124,33 @@ int main(int argc, char *argv[])
     if(db.open())
     {
         cout << "Подключение к базе удалось!" << endl;
-
-        printMenu();
-        int selected_action;
-        cin >> selected_action;
-
-        switch(selected_action)
+        while(true)
         {
-        case 1:
-        {
-            testSqlQueryModel();
-        }
-        break;
+            printMenu();
+            int selected_action;
+            cin >> selected_action;
 
-        case 2:
-        {
-            testSqlTableModel();
-        }
-        break;
+            switch(selected_action)
+            {
+            case 1:
+            {
+                testSqlQueryModel();
+            }
+            break;
 
-        case 3:
-        {
+            case 2:
+            {
+                testSqlTableModel();
+            }
+            break;
 
-        }
-        break;
-        }
+            case 3:
+            {
 
+            }
+            break;
+            }
+        }
     }
     else
     {
