@@ -19,12 +19,18 @@ void SensorRecordDouble::print() const
 
 QDomElement SensorRecordDouble::convertToXml(QDomDocument &xml_root_doc)
 {
-    QDomElement record_elem = SensorRecord::convertToXml(xml_root_doc);
+    // элемент записи в xml
+    QDomElement parameter_elem = xml_root_doc.createElement("Parameter");
 
-    QDomElement double_elem = xml_root_doc.createElement("double_value");
-    QDomText double_val_text = xml_root_doc.createTextNode(QString::fromStdString(std::to_string(_double_value)));
-    double_elem.appendChild(double_val_text);
-    record_elem.appendChild(double_elem);
+    // Задаём шифр
+    QDomAttr code_attribute = xml_root_doc.createAttribute("Code");
+    code_attribute.setValue(QString::number(_sensor_id));
+    parameter_elem.setAttributeNode(code_attribute);
 
-    return record_elem;
+    // Задаём значение
+    QDomAttr value_attribute = xml_root_doc.createAttribute("Value");
+    value_attribute.setValue(QString::number(_double_value));
+    parameter_elem.setAttributeNode(value_attribute);
+
+    return parameter_elem;
 }

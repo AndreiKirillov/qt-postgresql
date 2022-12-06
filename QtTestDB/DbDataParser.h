@@ -19,6 +19,8 @@ private:
 
     // прочитанные и обработанные данные
     std::vector<std::shared_ptr<SensorRecord>> _data_rows;
+
+    QString _date_of_data;
 public:
     DbDataParser(std::shared_ptr<QSqlQueryModel>& model);
 

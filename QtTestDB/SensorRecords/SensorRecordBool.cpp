@@ -19,12 +19,18 @@ void SensorRecordBool::print() const
 
 QDomElement SensorRecordBool::convertToXml(QDomDocument &xml_root_doc)
 {
-    QDomElement record_elem = SensorRecord::convertToXml(xml_root_doc);
+    // элемент записи в xml
+    QDomElement parameter_elem = xml_root_doc.createElement("Parameter");
 
-    QDomElement bool_elem = xml_root_doc.createElement("bool_value");
-    QDomText bool_text = xml_root_doc.createTextNode(_bool_value ? "true":"false");
-    bool_elem.appendChild(bool_text);
-    record_elem.appendChild(bool_elem);
+    // Задаём шифр
+    QDomAttr code_attribute = xml_root_doc.createAttribute("Code");
+    code_attribute.setValue(_code);
+    parameter_elem.setAttributeNode(code_attribute);
 
-    return record_elem;
+    // Задаём значение
+    QDomAttr value_attribute = xml_root_doc.createAttribute("Value");
+    value_attribute.setValue(_bool_value ? "true":"false");
+    parameter_elem.setAttributeNode(value_attribute);
+
+    return parameter_elem;
 }

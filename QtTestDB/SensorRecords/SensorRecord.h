@@ -12,6 +12,7 @@ protected:
     QDateTime _record_time;
     int _technology_object;
     int _sensor_id;
+    QString _code;   // шифр = ид_объекта + ид_сенсора
     QString _string_value;
 public:
     SensorRecord();
